@@ -22,5 +22,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.listen(PORT, () => {
+    console.log('\n-----------------------'.rainbow);
     console.log(`listening on http://localhost:${PORT}`);
 });
