@@ -10,9 +10,10 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now()
     },
-    comments: {
-        type: Schema.Types.ObjectId
-    }
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'News'
+    }]
 });
 
 const User = mongoose.model("User", UserSchema);

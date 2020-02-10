@@ -14,10 +14,13 @@ const NewsSchema = new Schema({
     },
     comments:
         [{
-            type: Schema.Types.ObjectId,
-            ref: 'User',
+            firstName: String,
+            lastName: String,
+            comment: String,
             default: []
-        }]
+        }
+        ],
+
 });
 
 const News = mongoose.model("News", NewsSchema);

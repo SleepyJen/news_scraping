@@ -8,7 +8,8 @@ const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost/newsDB"
 
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 connection.on('error', () => console.log('connection error'));
@@ -20,6 +21,13 @@ connection.once('open', () => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('./views'));
+
+const newsRoutes = require('./controller/newsRoutes');
+app.use('/news', newsRoutes);
+
+const htmlRoutes = require('./controller/htmlRoutes');
+app.use('/', htmlRoutes);
 
 app.listen(PORT, () => {
     console.log('\n-----------------------'.rainbow);

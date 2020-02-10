@@ -1,3 +1,6 @@
 body{
     background-color: rosybrown;
 }
+.container{
+    display: inline-block;
+}
