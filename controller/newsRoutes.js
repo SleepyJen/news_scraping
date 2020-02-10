@@ -47,7 +47,7 @@ router.get('/scrape', (req, res) => {
                 }
             });
         });
-        res.send(success);
+        res.send("success");
     });
 });
 
