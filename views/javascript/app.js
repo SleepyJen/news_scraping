@@ -1,7 +1,7 @@
 $(document).ready(function () {
     start();
-    function start() {
 
+    function start() {
         getNews();
         getAllNews(news => {
             console.log(news);
@@ -21,6 +21,8 @@ $(document).ready(function () {
 
     $(document).on('click', '.commentBtn', function () {
         $('.commentForm').empty();
+        $('.commentArea').empty();
+        let id = $(this).attr('id');
         $('.commentForm').append(`            
         <form>
         <div class="form-group">
@@ -33,18 +35,80 @@ $(document).ready(function () {
         </div>
         <button type="submit" class="btn btn-primary submitComment" id = ${$(this).attr('id')}>Submit</button>
     </form>`);
+        renderComments(id);
+
     });
 
     $(document).on('click', '.submitComment', function (e) {
         e.preventDefault();
         let name = $('#name').val();
         let comment = $('#Textarea').val();
+        let newsId = $(this).attr('id');
 
-
+        findNewsById(newsId, result => {
+            console.log(result);
+            addComment(newsId, name, comment, commentResult => {
+                renderComments(newsId);
+            });
+        });
     });
 
-    function findNewsById() {
+    $(document).on('click', '.deleteBtn', function () {
+        const id = $(this).attr('id');
+        const newsId = $(this).attr('data');
+        deleteComment(newsId, id, result => {
+            renderComments(newsId);
+        });
+    });
 
+    function deleteComment(newsId, id, cb) {
+        $.ajax({
+            method: 'POST',
+            url: `/news/deleteComment/${newsId}`,
+            data: { id: id }
+        }).then(result => {
+            cb(result);
+        });
+    }
+
+    function renderComments(newsId) {
+        findNewsById(newsId, result => {
+            console.log(result[0].comments);
+            let comments = result[0].comments;
+            $('.commentArea').empty();
+            for (let i = 0; i < comments.length; i++) {
+                $('.commentArea').prepend(`
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h5 class="card-title">${comments[i].name}</h5>
+                    <p class="card-text">${comments[i].comment}</p>
+                    <button class="btn btn-danger deleteBtn" id="${comments[i]._id}" data="${newsId}">Delete</button>
+                </div>
+            </div>`);
+            }
+        });
+    }
+
+    function addComment(id, name, comment, cb) {
+        $.ajax({
+            method: 'POST',
+            url: `/news/comment/${id}`,
+            data: {
+                name: name,
+                comment: comment
+            }
+        }).then(result => {
+            cb(result);
+        });
+    }
+
+    function findNewsById(id, cb) {
+        $.ajax({
+            method: 'GET',
+            url: `/news/findById/${id}`
+        }).then(result => {
+            cb(result);
+        });
     }
 
     function getNews() {

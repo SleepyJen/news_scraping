@@ -14,8 +14,7 @@ const NewsSchema = new Schema({
     },
     comments:
         [{
-            firstName: String,
-            lastName: String,
+            name: String,
             comment: String,
             default: []
         }

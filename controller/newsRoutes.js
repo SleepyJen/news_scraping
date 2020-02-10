@@ -10,6 +10,14 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/findById/:id', (req, res) => {
+    db.News.find({
+        _id: req.params.id
+    }).then(result => {
+        res.json(result);
+    });
+});
+
 router.get('/findByTitle', (req, res) => {
     db.News.find({
         headline: req.body.headline
@@ -40,8 +48,6 @@ router.get('/scrape', (req, res) => {
                     newObj.summary = summary.toString();
                     fullUrl = "https://www.cnet.com/" + url.toString();
                     newObj.url = fullUrl;
-                    console.log(newObj);
-
                     db.News.create(newObj).then(result => {
                     }).catch((err) => res.json(err));
                 }
@@ -67,8 +73,7 @@ router.post('/comment/:id', (req, res) => {
         {
             $push: {
                 comments: {
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
+                    name: req.body.name,
                     comment: req.body.comment
                 }
             }
@@ -76,6 +81,13 @@ router.post('/comment/:id', (req, res) => {
             res.json(result);
         }).catch((err) => {
             res.send(err);
+        });
+});
+
+router.post('/deleteComment/:id', (req, res) => {
+    db.News.updateOne({ _id: req.params.id },
+        { $pull: { comments: { _id: req.body.id } } }).then(() => {
+            res.send("deleted");
         });
 });
 
