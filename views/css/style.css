@@ -5,3 +5,7 @@ body{
     display: inline-block;
     float: left;
 }
+
+.deleteBtn{
+    margin-left: 70%;
+}

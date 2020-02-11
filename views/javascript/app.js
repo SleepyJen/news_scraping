@@ -4,7 +4,6 @@ $(document).ready(function () {
     function start() {
         getNews(result => {
             getAllNews(news => {
-                console.log(news);
                 for (let i = 0; i < news.length; i++) {
                     $('.news').prepend(`
                 <div class="card p-2 mt-2">
@@ -46,10 +45,14 @@ $(document).ready(function () {
         let comment = $('#Textarea').val();
         let newsId = $(this).attr('id');
 
+        if (name === '') {
+            name = 'anonymous'
+        }
         findNewsById(newsId, result => {
-            console.log(result);
             addComment(newsId, name, comment, commentResult => {
                 renderComments(newsId);
+                $('#name').val('');
+                $('#Textarea').val('');
             });
         });
     });
@@ -74,7 +77,6 @@ $(document).ready(function () {
 
     function renderComments(newsId) {
         findNewsById(newsId, result => {
-            console.log(result[0].comments);
             let comments = result[0].comments;
             $('.commentArea').empty();
             for (let i = 0; i < comments.length; i++) {
