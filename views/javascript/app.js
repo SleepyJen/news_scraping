@@ -2,11 +2,11 @@ $(document).ready(function () {
     start();
 
     function start() {
-        getNews();
-        getAllNews(news => {
-            console.log(news);
-            for (let i = 0; i < news.length; i++) {
-                $('.news').prepend(`
+        getNews(result => {
+            getAllNews(news => {
+                console.log(news);
+                for (let i = 0; i < news.length; i++) {
+                    $('.news').prepend(`
                 <div class="card p-2 mt-2">
                     <div class="card-body">
                         <h5 class="card-title">${news[i].headline}</h5>
@@ -15,7 +15,8 @@ $(document).ready(function () {
                         <button class="btn commentBtn" id = "${news[i]._id}"><i class="fa fa-comments"></i>Comment</button>
                     </div>
                 </div>`);
-            }
+                }
+            });
         });
     }
 
@@ -111,12 +112,13 @@ $(document).ready(function () {
         });
     }
 
-    function getNews() {
+    function getNews(cb) {
         $.ajax({
             method: 'GET',
             url: '/news/scrape'
         }).then(result => {
             console.log('Got latest news');
+            cb(result);
         });
     }
 
