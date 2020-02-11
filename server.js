@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const connection = mongoose.connection;
 const color = require('colors');
 const PORT = process.env.PORT || 8000;
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost/newsDB"
+const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost/newsDB"
 
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
